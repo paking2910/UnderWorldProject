@@ -23,7 +23,7 @@ public class EnemyFollowPlayer : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
-                playerTarget = player.transform;
+                playerTarget  = player.transform;
             }
         }
     }
