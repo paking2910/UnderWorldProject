@@ -1,0 +1,36 @@
+using UnityEngine;
+
+// Script นี้ต้องแนบกับ GameObject ไอเทมเลือด
+public class HealthPickup : MonoBehaviour
+{
+    // กำหนดค่าพลังชีวิตที่จะเพิ่ม (ตั้งค่าใน Inspector)
+    public float healAmount = 2f; // จากภาพคุณตั้งค่านี้เป็น 20
+
+    // ฟังก์ชันนี้จะทำงานเมื่อเกิดการชนแบบ Trigger
+    // **สำคัญ:** Collider 2D ของไอเทมต้องตั้งค่า Is Trigger เป็น True
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // 1. ตรวจสอบว่าวัตถุที่ชนมี Tag เป็น "Player" หรือไม่
+        //    (เรายืนยันแล้วว่าผู้เล่นมี Tag เป็น "Player")
+        if (other.CompareTag("Player"))
+        {
+            // 2. พยายามดึง Component HealthSystem จากผู้เล่น
+            HealthSystem playerHealth = other.GetComponent<HealthSystem>();
+
+            // 3. ป้องกัน NullReferenceException และตรวจสอบว่าผู้เล่นมีระบบเลือด
+            if (playerHealth != null)
+            {
+                // 4. สั่งให้ผู้เล่นเพิ่มพลังชีวิต
+                playerHealth.Heal(healAmount);
+                
+                // 5. ทำลายไอเทมทิ้งหลังจากเก็บแล้ว
+                Destroy(gameObject); 
+            }
+            else
+            {
+                // Log Error นี้หากเกิดปัญหา
+                Debug.LogError("HealthSystem component not found on Player object.");
+            }
+        }
+    }
+}
